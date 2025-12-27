@@ -1,12 +1,13 @@
 
 import React from 'react';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Bell, User, Search, PlusCircle, Calendar, ListChecks } from 'lucide-react';
+import { LayoutDashboard, Bell, User, Search, PlusCircle, Calendar, ListChecks, Award, Zap } from 'lucide-react';
 import { getStoredProperties, getStoredProfile } from '../data/mockData';
 import { getPropertyAlerts } from '../utils/alertUtils';
 
 // Define props to include user
 interface LayoutProps {
+  // Fixed: Changed React.Node to React.ReactNode
   children: React.ReactNode;
   user?: any;
 }
@@ -63,9 +64,12 @@ const Layout: React.FC<LayoutProps> = ({ children, user }) => {
               </button>
               <button 
                 onClick={() => navigate('/profile')}
-                className="w-10 h-10 rounded-2xl border-2 border-white dark:border-slate-600 shadow-md overflow-hidden active:scale-95 transition-all bg-slate-100"
+                className="relative w-10 h-10 rounded-2xl border-2 border-white dark:border-slate-600 shadow-md active:scale-95 transition-all bg-slate-100 dark:bg-slate-700"
               >
-                <img src={profile?.photo || "https://i.pravatar.cc/150?u=manager"} className="w-full h-full object-cover" alt="Profile" />
+                <img src={user?.photoURL || profile?.photo || "https://i.pravatar.cc/150?u=manager"} className="w-full h-full object-cover rounded-xl" alt="Profile" />
+                <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center border-2 border-white dark:border-slate-800 shadow-sm ${user?.isPro ? 'bg-amber-500' : 'bg-slate-400'}`}>
+                  {user?.isPro ? <Award size={8} className="text-white" /> : <Zap size={8} className="text-white" />}
+                </div>
               </button>
             </div>
           </div>

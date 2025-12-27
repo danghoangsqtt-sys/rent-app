@@ -12,6 +12,7 @@ import Schedule from './pages/Schedule';
 import ProfileMain from './pages/ProfileMain';
 import ProfileInfo from './pages/ProfileInfo';
 import SystemSettings from './pages/SystemSettings';
+import ProPlan from './pages/ProPlan';
 import LoadingScreen from './components/LoadingScreen';
 import Login from './pages/Login';
 import { auth, getUserData } from './services/FirebaseService';
@@ -66,6 +67,7 @@ const App: React.FC = () => {
             <Route path="/profile" element={<ProfileMain user={user} />} />
             <Route path="/profile/info" element={<ProfileInfo user={user} />} />
             <Route path="/profile/settings" element={<SystemSettings user={user} />} />
+            <Route path="/profile/pro" element={<ProPlan user={user} />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </Layout>

@@ -4,8 +4,7 @@ import {
   getAuth, 
   GoogleAuthProvider, 
   signInWithPopup, 
-  signOut, 
-  onAuthStateChanged
+  signOut 
 } from "firebase/auth";
 import { 
   getFirestore, 
@@ -17,14 +16,15 @@ import {
   updateDoc 
 } from "firebase/firestore";
 
-// THAY THẾ ĐOẠN NÀY BẰNG CONFIG CỦA BẠN TỪ FIREBASE CONSOLE
+// CONFIG FIREBASE
 const firebaseConfig = {
-  apiKey: "AIzaSyCll5wdmjMcfHKUkOko4uqTT1kVgfDK01I", 
+  apiKey: "AIzaSyCll5wdmjMcfHKUkOko4uqTT1kVgfDK01I",
   authDomain: "rentmasterpro.firebaseapp.com",
   projectId: "rentmasterpro",
   storageBucket: "rentmasterpro.firebasestorage.app",
   messagingSenderId: "564624312294",
-  appId: "1:564624312294:web:c942ade3eb5a080672f827"
+  appId: "1:564624312294:web:c942ade3eb5a080672f827",
+  measurementId: "G-5H600858F7"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -32,7 +32,10 @@ export const auth = getAuth(app);
 export const db = getFirestore(app);
 const googleProvider = new GoogleAuthProvider();
 
-export const loginWithGoogle = async () => {
+/**
+ * Đăng nhập bằng Google
+ */
+export async function loginWithGoogle() {
   try {
     const result = await signInWithPopup(auth, googleProvider);
     const user = result.user;
@@ -46,7 +49,7 @@ export const loginWithGoogle = async () => {
         displayName: user.displayName,
         photoURL: user.photoURL,
         isPro: false,
-        isAdmin: false, // Mặc định không phải admin
+        isAdmin: false,
         createdAt: new Date().toISOString()
       });
     }
@@ -55,25 +58,25 @@ export const loginWithGoogle = async () => {
     console.error("Login Error:", error);
     throw error;
   }
-};
+}
 
-export const logout = () => signOut(auth);
+export function logout() {
+  return signOut(auth);
+}
 
-export const getUserData = async (uid: string) => {
+export async function getUserData(uid: string) {
   const userRef = doc(db, "users", uid);
   const userSnap = await getDoc(userRef);
   return userSnap.exists() ? userSnap.data() : null;
-};
+}
 
-// Fix: Added missing export getAllUsers for AdminManagement.tsx
-export const getAllUsers = async () => {
+export async function getAllUsers() {
   const usersCol = collection(db, "users");
   const userSnapshot = await getDocs(usersCol);
   return userSnapshot.docs.map(doc => doc.data());
-};
+}
 
-// Fix: Added missing export setProStatus for AdminManagement.tsx
-export const setProStatus = async (uid: string, status: boolean) => {
+export async function setProStatus(uid: string, status: boolean) {
   const userRef = doc(db, "users", uid);
   await updateDoc(userRef, { isPro: status });
-};
+}
